@@ -1,6 +1,6 @@
 # gitlab-notifier README
 
-This is the README for your extension "gitlab-notifier". After writing up a brief description, we recommend including the following sections.
+gitlab-notifier
 
 ## Features
 
