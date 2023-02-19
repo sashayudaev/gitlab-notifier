@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-export type NotificationType = 
+export type TodoType = 
 	  'directly_addressed' 
 	| 'assigned' 
 	| 'build_failed'
@@ -12,11 +12,11 @@ export interface Author {
 	username: string;
 	name: string;
 }
-export interface Notification {
+export interface Todo {
 	id: number;
 	body: string;
 	author: Author;
 	target_url: string;
-	action_name: NotificationType;
+	action_name: TodoType;
 	created_at: string;
 }

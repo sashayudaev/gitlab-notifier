@@ -1,9 +1,9 @@
 import fetch from 'node-fetch';
-import { Notification } from './types';
+import { Todo } from './types/todo-channel';
 
 interface Response {
   ok: boolean;
-  data: Notification[];
+  data: Todo[];
 }
 export default async (): Promise<Response> => {
 	// eslint-disable-next-line @typescript-eslint/naming-convention
