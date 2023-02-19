@@ -1,15 +1,13 @@
 import { MessageStore } from "./message-store";
-import { Channel } from "./channels/channel";
 import { ChannelOptions } from "./types/channel";
 import { FetchOptions } from "./fetch";
 import MergeRequestChannel from './channels/merge-request-channel';
 import { WorkspaceConfiguration, CancellationTokenSource, commands, workspace } from 'vscode';
 import retryCallback from "./retry-callback";
 import { COMMANDS, defaultChannelOptions, defaultFetchOptions } from "./constants";
+import { ChannelCollection } from "./channel-collection";
 
-
-let intervals: NodeJS.Timer[];
-
+let channels: ChannelCollection;
 export async function activate() {
 	const cancellationToken = new CancellationTokenSource();
 	const configuration: WorkspaceConfiguration = workspace.getConfiguration('gitlabNotifier');
@@ -34,18 +32,14 @@ export async function activate() {
 		throw new Error('You should configure username in settings first');
 	}
 	
-	const store = new MessageStore(username);
-	const channels: Channel[] = [
+	channels = new ChannelCollection([
 		new MergeRequestChannel(username, channelOptions, fetchOptions)
-	];
-
-	for (const channel of channels) {
-		await channel.configure();
-	}
-
-	intervals = channels.map(channel => channel.poll(message => store.onReceive(message)));
+	]);
+	
+	const store = new MessageStore(username);
+	channels.listen(message => store.onReceive(message));
 }
 
 export function deactivate() {
-	intervals?.forEach(clearInterval);
+	channels.stop();
 }

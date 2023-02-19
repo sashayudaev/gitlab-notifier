@@ -21,6 +21,8 @@ export default (cancellationTokenSource: CancellationTokenSource) => async (inte
       [Retry now](command:${COMMANDS.RETRY}) or
       [Cancel](command:${COMMANDS.CANCEL})`});
 
+      console.log('delay for ', interval * retriesLeft);
+      
     await delay(interval * retriesLeft);
   }));
 };
