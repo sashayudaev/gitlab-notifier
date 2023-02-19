@@ -3,7 +3,7 @@ import { FetchOptions } from "./fetch";
 import { ChannelOptions, MessageType } from "./types/channel";
 
 export const defaultChannelOptions: ChannelOptions = {
-  fetchInterval: 5000
+  fetchInterval: 300000
 };
 
 export const defaultFetchOptions: FetchOptions = {
