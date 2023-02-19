@@ -26,7 +26,7 @@ export default class MergeRequestChannel extends Channel {
       const data = await getNotes(mr.project.id, mr.iid, this.fetchOptions);
       
       data.forEach(note => {
-        if(note.author.username !== this.username) {
+        if(!note.resolved && note.author.username !== this.username) {
           note.targetUrl = `${mr.project.url}/-/merge_requests/${mr.iid}#note_${note.id}`;
           notes.push(note);
         }
@@ -51,13 +51,13 @@ export default class MergeRequestChannel extends Channel {
   }
 
   private getMessageType(note: Note): MessageType {
-    if(note.body.startsWith(MESSAGE_TYPE.ASSIGNED)) {
+    if(note.body.startsWith('assigned')) {
       return MESSAGE_TYPE.ASSIGNED;
     }
-    if(note.body.startsWith(MESSAGE_TYPE.APPROVED)) {
+    if(note.body.startsWith('approved')) {
       return MESSAGE_TYPE.APPROVED;
     }
-    if(note.body.startsWith(MESSAGE_TYPE.APPROVAL_REQUIRED)) {
+    if(note.body.startsWith('requested review')) {
       return MESSAGE_TYPE.APPROVAL_REQUIRED;
     }
     return MESSAGE_TYPE.COMMENTED;

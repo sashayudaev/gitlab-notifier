@@ -5,6 +5,7 @@ export type Note = {
     username: string;
   };
   targetUrl: string;
+  resolved: boolean;
 };
 
 export type Project =  {
