@@ -1,7 +1,10 @@
 {
   "name": "gitlab-notifier",
   "displayName": "GitLab Notifier",
+  "publisher": "sashayudaev",
+  "repository": "https://github.com/sashayudaev/gitlab-notifier",
   "description": "",
+  "icon": "images/logo.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.75.0"
