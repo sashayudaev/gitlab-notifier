@@ -12,7 +12,7 @@ export class ChannelCollection {
   private intervals: NodeJS.Timer[] = [];
   private retryToken: CancellationTokenSource;
   private cancelToken: CancellationTokenSource;
-  private options: ChannelOptions | undefined;
+  private options: ChannelOptions;
 
   constructor(commands: Disposable[], channels: Channel[], options?: ChannelOptions) {
     this.channels = channels;
