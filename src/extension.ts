@@ -2,13 +2,13 @@ import { MessageStore } from "./message-store";
 import { ChannelOptions } from "./types/channel";
 import { FetchOptions } from "./fetch";
 import MergeRequestChannel from './channels/merge-request-channel';
-import { WorkspaceConfiguration, CancellationTokenSource, commands, workspace } from 'vscode';
+import { WorkspaceConfiguration, CancellationTokenSource, commands, workspace, ExtensionContext } from 'vscode';
 import retryCallback from "./retry-callback";
 import { COMMANDS, defaultChannelOptions, defaultFetchOptions } from "./constants";
 import { ChannelCollection } from "./channel-collection";
 
 let channels: ChannelCollection;
-export async function activate() {
+export async function activate(context: ExtensionContext) {
 	const cancellationToken = new CancellationTokenSource();
 	const configuration: WorkspaceConfiguration = workspace.getConfiguration('gitlabNotifier');
 	
@@ -26,7 +26,7 @@ export async function activate() {
 		retryDelay: 5000, 
 		retryCallback: retryCallback(cancellationToken)
 	};
-
+	
 	const username = configuration.get<string>('username');
 	if(!username) {
 		throw new Error('You should configure username in settings first');

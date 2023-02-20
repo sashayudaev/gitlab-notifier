@@ -3,6 +3,7 @@ export type MessageType =
   | 'assigned' 
   | 'build_failed'
   | 'mentioned'
+  | 'committed'
   | 'approved'
   | 'approval_required'
   | 'commented'

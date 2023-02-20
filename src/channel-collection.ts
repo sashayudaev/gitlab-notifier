@@ -1,7 +1,7 @@
 import { OnReceiveDelegate } from "./types/channel";
 import { Channel } from './channels/channel';
 import { CancellationTokenSource, window } from "vscode";
-import retryCallback, { delay } from "./retry-callback";
+import retryCallback from "./retry-callback";
 
 export class ChannelCollection {
   private channels: Channel[] = [];

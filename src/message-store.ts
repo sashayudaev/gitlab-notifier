@@ -47,6 +47,9 @@ export class MessageStore {
 				text = 'Сборка не прошла: ' + message.text;
 				notify = showErrorMessage;
 				break;
+			case 'committed':
+				text = 'Новый коммит от ' + message.sender;
+				break;
 			default:
 				text = undefined;
 				break;
@@ -56,11 +59,10 @@ export class MessageStore {
 			return;
 		}
 
-    const actions = message.targetUrl ? ['Go to GitLab'] : [];
-		console.log(message.targetUrl);
+    const actions = message.targetUrl ? ['Go to GitLab', 'Mark as read'] : [];
 		
-		const openInBrowser = await notify(text, ...actions);
-		if(openInBrowser && message.targetUrl) {
+		const command = await notify(text, ...actions);
+		if(command === 'Go to GitLab' && message.targetUrl) {
 			executeCommand('vscode.open', vscode.Uri.parse(message.targetUrl));
 		}
   }

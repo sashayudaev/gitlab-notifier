@@ -67,6 +67,9 @@ export default class MergeRequestChannel extends Channel {
     if(note.body.startsWith('```suggestion')) {
       return MESSAGE_TYPE.SUGGESTED;
     }
+    if(note.body.startsWith('added') && note.body.includes('commit')) {
+      return MESSAGE_TYPE.COMMITED;
+    }
     return MESSAGE_TYPE.COMMENTED;
   }
 }

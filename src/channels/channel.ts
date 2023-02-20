@@ -20,9 +20,9 @@ export abstract class Channel {
       messages?.forEach(onReceive);
     };
 
-    return setInterval(() => {
+    return setInterval(async () => {
       try {
-        return receiveMessages();
+        await receiveMessages();
       } catch (error: any) {
         if(error.type !== 'AbortError') {
           onError(error, receiveMessages);

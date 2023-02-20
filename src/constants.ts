@@ -29,5 +29,6 @@ export const MESSAGE_TYPE: Record<string, MessageType> = {
   ADDRESSED: 'directly_addressed',
   BUILD_FAILED: 'build_failed',
   MENTIONED: 'mentioned',
+  COMMITED: 'committed',
   APPROVAL_REQUIRED: 'approval_required',
 };
