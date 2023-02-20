@@ -14,14 +14,18 @@ export abstract class Channel {
 
   protected abstract fetch(): Promise<Message[] | undefined>;
   
-  listen(onReceive: OnReceiveDelegate, onError?: OnErrorDelegate): NodeJS.Timer {
-    return setInterval(async () => {
+  listen(onReceive: OnReceiveDelegate, onError: OnErrorDelegate): NodeJS.Timer {
+    const receiveMessages = async () => {
+      const messages = await this.fetch();        
+      messages?.forEach(onReceive);
+    };
+
+    return setInterval(() => {
       try {
-        const messages = await this.fetch();        
-        messages?.forEach(onReceive);
+        return receiveMessages();
       } catch (error: any) {
         if(error.type !== 'AbortError') {
-          onError?.(error);
+          onError(error, receiveMessages);
         }
       }
     }, this.channelOptions.fetchInterval);

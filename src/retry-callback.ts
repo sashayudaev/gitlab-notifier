@@ -4,25 +4,22 @@ import { COMMANDS } from './constants';
 type ProgressCallback<R> = (progress: Progress<{ message?: string; increment?: number }>, token: CancellationToken) => Thenable<R>;
 
 const withProgress = async <R>(callback: ProgressCallback<R>) => window.withProgress({ location: ProgressLocation.Notification}, callback);
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const abortController = new AbortController();
 
-export default (cancellationTokenSource: CancellationTokenSource) => async (interval: number, retriesLeft: number) => {
-  await withProgress(async (progress) => new Promise(async resolve => {
+export default (cancellationTokenSource: CancellationTokenSource) => (interval: number, factor: number): Promise<void> => {
+  return withProgress(async (progress) => new Promise(resolve => {
     cancellationTokenSource.token.onCancellationRequested(() => {
       abortController.abort();
-      resolve(null);
+      resolve();
     });
 
     progress.report({ message: `
-      Could not connect to GitLab. 
-      Retrying in ${interval * retriesLeft/1000}s. 
+      Reconnecting to GitLab in ${interval * factor/1000}s. 
       [Retry now](command:${COMMANDS.RETRY}) or
       [Cancel](command:${COMMANDS.CANCEL})`});
-
-      console.log('delay for ', interval * retriesLeft);
       
-    await delay(interval * retriesLeft);
+    return delay(interval * factor);
   }));
 };

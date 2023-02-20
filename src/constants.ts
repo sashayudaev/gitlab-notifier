@@ -25,6 +25,7 @@ export const MESSAGE_TYPE: Record<string, MessageType> = {
   ASSIGNED: 'assigned',
   APPROVED: 'approved',
   COMMENTED: 'commented',
+  SUGGESTED: 'suggested',
   ADDRESSED: 'directly_addressed',
   BUILD_FAILED: 'build_failed',
   MENTIONED: 'mentioned',

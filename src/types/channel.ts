@@ -5,7 +5,8 @@ export type MessageType =
   | 'mentioned'
   | 'approved'
   | 'approval_required'
-  | 'commented';
+  | 'commented'
+  | 'suggested';
 
 export type Message = {
   id: number;
@@ -16,7 +17,7 @@ export type Message = {
 };
 
 export type OnReceiveDelegate = (message: Message) => void;
-export type OnErrorDelegate = (error: any, callback?: () => Promise<void>) => void;
+export type OnErrorDelegate = (error: any, callback: () => Promise<void>) => void;
 export interface ChannelOptions {
   fetchInterval: number;
 }

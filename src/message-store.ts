@@ -28,6 +28,9 @@ export class MessageStore {
       case 'commented':
 				text = message.sender + ': ' + message.text;
         break;
+			case 'suggested':
+				text = 'Предложение по коду от ' + message.sender;
+				break;
 			case 'directly_addressed':
 				text = message.sender + ': ' + message.text.replace(`@${this.username}`, '');
 				break;

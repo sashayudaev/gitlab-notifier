@@ -21,3 +21,7 @@ export type MergeRequest = {
   project: Project;
   [key: string]: any;
 };
+
+export type MergeRequestOptions = {
+  reviewer: boolean;
+};

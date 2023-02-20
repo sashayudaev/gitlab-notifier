@@ -17,10 +17,14 @@ export default class MergeRequestChannel extends Channel {
   }
 
   protected async fetch(): Promise<Message[] | undefined> {
-    const mergeRequests = await getMergeRequests(this.username, this.fetchOptions);
+    const assignedMr = await getMergeRequests(this.username, this.fetchOptions);
+    const reviewedMr = await getMergeRequests(this.username, this.fetchOptions, { reviewer: true });
+    console.log({assignedMr});
+    console.log({reviewedMr});
+    
     
     const notes: Note[] = [];
-    for (const mr of mergeRequests) {
+    for (const mr of assignedMr.concat(reviewedMr)) {
       mr.project = await this.getProject(mr.project.id);
       
       const data = await getNotes(mr.project.id, mr.iid, this.fetchOptions);
@@ -59,6 +63,9 @@ export default class MergeRequestChannel extends Channel {
     }
     if(note.body.startsWith('requested review')) {
       return MESSAGE_TYPE.APPROVAL_REQUIRED;
+    }
+    if(note.body.startsWith('```suggestion')) {
+      return MESSAGE_TYPE.SUGGESTED;
     }
     return MESSAGE_TYPE.COMMENTED;
   }
