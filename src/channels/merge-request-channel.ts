@@ -1,6 +1,6 @@
 import { ChannelOptions, Message, MessageType } from "../types/channel";
 import { Channel } from "./channel";
-import { FetchOptions } from '../fetch';
+import { FetchOptions } from "../types/fetch";
 import { Note, Project } from "../types/merge-request-channel";
 import getMergeRequests from "../connections/get-merge-requests";
 import getNotes from "../connections/get-notes";
@@ -19,9 +19,6 @@ export default class MergeRequestChannel extends Channel {
   protected async fetch(): Promise<Message[] | undefined> {
     const assignedMr = await getMergeRequests(this.username, this.fetchOptions);
     const reviewedMr = await getMergeRequests(this.username, this.fetchOptions, { reviewer: true });
-    console.log({assignedMr});
-    console.log({reviewedMr});
-    
     
     const notes: Note[] = [];
     for (const mr of assignedMr.concat(reviewedMr)) {

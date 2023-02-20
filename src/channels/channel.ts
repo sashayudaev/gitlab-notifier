@@ -1,6 +1,5 @@
-import { window } from 'vscode';
 import { defaultChannelOptions, defaultFetchOptions } from "../constants";
-import { FetchOptions } from "../fetch";
+import { FetchOptions } from "../types/fetch";
 import { ChannelOptions, Message, OnErrorDelegate, OnReceiveDelegate } from "../types/channel";
 
 export abstract class Channel {

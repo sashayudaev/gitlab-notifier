@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { FetchOptions } from "./fetch";
 import { ChannelOptions, MessageType } from "./types/channel";
+import { FetchOptions } from "./types/fetch";
 
 export const defaultChannelOptions: ChannelOptions = {
+  retryCount: 3,
+  retryInterval: 5000,
   fetchInterval: 300000
 };
 
@@ -17,8 +19,9 @@ export const SETTINGS = {
 };
 
 export const COMMANDS = {
-  RETRY: 'retryCommand',
-  CANCEL: 'cancelCommand'
+  WAIT: 'gitlabNotifier.waitCommand',
+  RETRY: 'gitlabNotifier.retryCommand',
+  CANCEL: 'gitlabNotifier.cancelCommand'
 };
 
 export const MESSAGE_TYPE: Record<string, MessageType> = {

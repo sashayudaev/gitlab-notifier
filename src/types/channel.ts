@@ -20,5 +20,7 @@ export type Message = {
 export type OnReceiveDelegate = (message: Message) => void;
 export type OnErrorDelegate = (error: any, callback: () => Promise<void>) => void;
 export interface ChannelOptions {
+  retryCount: number;
+  retryInterval: number;
   fetchInterval: number;
 }

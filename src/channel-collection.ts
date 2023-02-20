@@ -1,16 +1,34 @@
-import { OnReceiveDelegate } from "./types/channel";
+import * as vscode from "vscode";
+import { ChannelOptions, OnReceiveDelegate } from "./types/channel";
 import { Channel } from './channels/channel';
-import { CancellationTokenSource, window } from "vscode";
-import retryCallback from "./retry-callback";
+import { CancellationTokenSource, Disposable, window } from "vscode";
+import { COMMANDS, defaultChannelOptions } from "./constants";
+import showProgressMessage from "./show-progress-message";
 
+const { registerCommand } = vscode.commands;
 export class ChannelCollection {
   private channels: Channel[] = [];
+  private commands: Disposable[] = [];
   private intervals: NodeJS.Timer[] = [];
-  private showProgressMessage: (interval: number, retriesLeft: number) => Promise<void>;
+  private retryToken: CancellationTokenSource;
+  private cancelToken: CancellationTokenSource;
+  private options: ChannelOptions | undefined;
 
-  constructor(channels: Channel[]) {
+  constructor(commands: Disposable[], channels: Channel[], options?: ChannelOptions) {
     this.channels = channels;
-    this.showProgressMessage = retryCallback(new CancellationTokenSource());
+    this.options = options || defaultChannelOptions;
+    this.retryToken = new CancellationTokenSource();
+    this.cancelToken = new CancellationTokenSource();
+
+    commands.push(registerCommand(COMMANDS.CANCEL, () => {
+      this.cancelToken.cancel();
+      this.cancelToken = new CancellationTokenSource();
+    }));
+
+    commands.push(registerCommand(COMMANDS.RETRY, () => {
+      this.retryToken.cancel();
+      this.retryToken = new CancellationTokenSource();
+    }));
   }
 
   listen(onReceive: OnReceiveDelegate) {
@@ -18,7 +36,7 @@ export class ChannelCollection {
       return channel.listen(onReceive, async (error, callback) => {
         this.stop();
 
-        const ok = await this.retry(3, callback);
+        const ok = await this.retry(this.options.retryCount, callback);
         if(ok) {
           this.listen(onReceive);
         } else {
@@ -31,6 +49,7 @@ export class ChannelCollection {
 
   stop() {
     this.intervals.forEach(clearInterval);
+    this.commands.forEach(command => command.dispose());
   }
 
   private async retry(retryCount: number, callback: () => Promise<void>): Promise<boolean> {
@@ -38,8 +57,16 @@ export class ChannelCollection {
       return false;
     }
 
-    await this.showProgressMessage(5000, 3 - (retryCount - 1));
+    const proceed = await showProgressMessage(
+      this.options?.retryInterval, 
+      this.options.retryCount - (retryCount - 1), 
+      this.cancelToken.token, 
+      this.retryToken.token);
     
+    if(!proceed) {
+      return false;
+    }
+
     try {
       await callback();      
       return true;
