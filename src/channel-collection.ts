@@ -40,8 +40,12 @@ export class ChannelCollection {
         if(ok) {
           this.listen(onReceive);
         } else {
-          window.showErrorMessage(
-            'Could not connect to remote server: ' + error.message);
+          const reconnect = await window.showErrorMessage(
+            'Could not connect to remote server: ', 'Reconnect');
+
+          if(reconnect) {
+            this.listen(onReceive);
+          }
         }
       });
     });

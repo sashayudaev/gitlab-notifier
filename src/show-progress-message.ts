@@ -27,9 +27,7 @@ export default (interval: number, factor: number, cancelToken: CancellationToken
         [Retry now](command:${COMMANDS.RETRY}) or
         [Cancel](command:${COMMANDS.CANCEL})`});
       
-    await delay(interval * factor, retryToken);
-    console.log('continue');
-    
+    await delay(interval * factor, retryToken);    
     resolve(true);
   }));
 };

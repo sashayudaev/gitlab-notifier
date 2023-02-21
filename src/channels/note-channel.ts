@@ -7,7 +7,7 @@ import getNotes from "../connections/get-notes";
 import getProject from "../connections/get-project";
 import { MESSAGE_TYPE } from "../constants";
 
-export default class MergeRequestChannel extends Channel {
+export default class extends Channel {
   username: string;
   private projects: Record<number, Project> = {};
 

@@ -28,13 +28,21 @@
           "type": "string",
           "default": null
         },
-        "gitlabNotifier.interval": {
-          "type": "integer",
-          "default": 300000
-        },
         "gitlabNotifier.username": {
           "type": "string",
           "default": null
+        },
+        "gitlabNotifier.fetchInterval": {
+          "type": "integer",
+          "default": 300000
+        },
+        "gitlabNotifier.retryCount": {
+          "type": "integer",
+          "default": 3
+        },
+        "gitlabNotifier.retryInterval": {
+          "type": "number",
+          "default": 5000
         }
       }
     },

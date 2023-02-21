@@ -19,6 +19,7 @@ export const SETTINGS = {
 };
 
 export const COMMANDS = {
+  RELOAD: 'gitlabNotifier.reloadCommand',
   WAIT: 'gitlabNotifier.waitCommand',
   RETRY: 'gitlabNotifier.retryCommand',
   CANCEL: 'gitlabNotifier.cancelCommand'
